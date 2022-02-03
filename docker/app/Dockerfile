@@ -1,11 +1,11 @@
 FROM rust:1.57.0
 
-# Node.js 17.3.0
-# cf. https://github.com/nodejs/docker-node/blob/39dc17f7f2bb3fb21001bdbafd335fd55cccbe06/17/bullseye/Dockerfile
+# Node.js 16.13.1
+# cf. https://github.com/nodejs/docker-node/blob/6f740b0ca772e978b44c11d194f369e554c54a14/16/bullseye/Dockerfile
 RUN groupadd --gid 1000 node \
   && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
 
-ENV NODE_VERSION 17.3.0
+ENV NODE_VERSION 16.13.1
 
 RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
   && case "${dpkgArch##*-}" in \
@@ -46,7 +46,7 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
   && node --version \
   && npm --version
 
-ENV YARN_VERSION 1.22.17
+ENV YARN_VERSION 1.22.15
 
 RUN set -ex \
   && for key in \
@@ -74,5 +74,7 @@ RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
 # install cargo-generate
 RUN cargo install cargo-generate
+
+WORKDIR /opt
 
 CMD [ "node" ]
