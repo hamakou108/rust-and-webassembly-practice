@@ -75,6 +75,16 @@ RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 # install cargo-generate
 RUN cargo install cargo-generate
 
-WORKDIR /opt
+# install Google Chrome
+RUN wget -q -O /tmp/linux_signing_key.pub https://dl-ssl.google.com/linux/linux_signing_key.pub \
+  && gpg --no-default-keyring --keyring /tmp/temp-keyring.gpg --import /tmp/linux_signing_key.pub \
+  && mkdir -p /usr/local/share/keyrings/ \
+  && gpg --no-default-keyring --keyring /tmp/temp-keyring.gpg --export --output /usr/local/share/keyrings/google-chrome.gpg \
+  && rm /tmp/linux_signing_key.pub /tmp/temp-keyring.gpg \
+  && echo 'deb [arch=amd64 signed-by=/usr/local/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list \
+  && apt-get update \
+  && apt-get install -y google-chrome-stable
+
+WORKDIR /opt/wasm-game-of-life
 
 CMD [ "node" ]
