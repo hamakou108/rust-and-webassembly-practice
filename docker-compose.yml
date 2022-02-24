@@ -8,5 +8,5 @@ services:
     environment:
       - USER=${USER}
     volumes:
-      - ./wasm-game-of-life:/opt/wasm-game-of-life
+      - .:/opt/wasm-game-of-life
     tty: true
